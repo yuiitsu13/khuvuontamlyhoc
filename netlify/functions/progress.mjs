@@ -5,12 +5,36 @@ import { scryptSync, randomBytes, timingSafeEqual } from "node:crypto";
 const J = (b, s = 200) => new Response(JSON.stringify(b), { status: s, headers: { "content-type": "application/json", "cache-control": "no-store" } });
 const users = () => getStore({ name: "users", consistency: "strong" }), sess = () => getStore({ name: "sessions", consistency: "strong" }), prog = () => getStore({ name: "progress", consistency: "strong" });
 const hash = (pw, salt) => scryptSync(pw, salt, 32).toString("hex");
+const RESET_CODE = process.env.RESET_PASSCODE || "0379992001";   // mã passcode đặt lại mật khẩu (nên đặt biến môi trường RESET_PASSCODE trên Netlify)
+const lim = () => getStore({ name: "resetlimit", consistency: "strong" });
+const sha = (x) => scryptSync(String(x), "pmd-reset", 32);
 const SEED = { name: "anduy13", pw: "12345" };   // tài khoản có sẵn nội dung tâm lý học
 const pub = (u) => ({ name: u.name, avatar: u.avatar || null });
 const newSession = async (name) => { const t = randomBytes(32).toString("hex"); await sess().set(t, name); return t; };
 
 export default async (req) => {
   const a = new URL(req.url).searchParams.get("a") || "";
+
+  if (req.method === "POST" && a === "reset") {
+    let b; try { b = await req.json(); } catch { return J({ error: "Dữ liệu không hợp lệ" }, 400); }
+    const name = String(b.username || "").trim().toLowerCase(), np = String(b.newPassword || "");
+    if (!/^[a-z0-9_]{3,20}$/.test(name)) return J({ error: "Tên đăng nhập không hợp lệ" }, 400);
+    const rec = (await lim().get(name, { type: "json" })) || { n: 0, t: 0 };
+    if (Date.now() - rec.t > 15 * 60 * 1000) { rec.n = 0; }
+    if (rec.n >= 5) return J({ error: "Nhập sai quá nhiều lần, thử lại sau 15 phút" }, 429);
+    if (!timingSafeEqual(sha(b.passcode || ""), sha(RESET_CODE))) {
+      await lim().setJSON(name, { n: rec.n + 1, t: Date.now() });
+      return J({ error: "Mã passcode không đúng" }, 403);
+    }
+    if (np.length < 6 || np.length > 100) return J({ error: "Mật khẩu mới cần từ 6 ký tự" }, 400);
+    let u = await users().get(name, { type: "json" });
+    if (!u && name !== SEED.name) return J({ error: "Không tìm thấy tên đăng nhập này" }, 404);
+    const salt = randomBytes(16).toString("hex");
+    u = { ...(u || { name, avatar: null }), salt, hash: hash(np, salt) };
+    await users().setJSON(name, u);
+    await lim().delete(name);
+    return J({ token: await newSession(name), user: pub(u) });
+  }
 
   if (req.method === "POST" && (a === "register" || a === "login")) {
     let b; try { b = await req.json(); } catch { return J({ error: "Dữ liệu không hợp lệ" }, 400); }
