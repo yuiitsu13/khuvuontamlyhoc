@@ -230,7 +230,7 @@
                         <button onclick="openCreateGardenModal()" class="flex-1 sm:flex-none px-3 py-2 rounded-xl bg-teal-100 dark:bg-teal-900/40 hover:bg-teal-200 dark:hover:bg-teal-800/60 text-teal-700 dark:text-teal-300 font-semibold text-xs transition-colors">
                             <i class="fa-solid fa-folder-plus"></i> Vườn Mới
                         </button>
-                        <button onclick="openImportModal()" class="flex-1 sm:flex-none px-3 py-2 rounded-xl bg-sky-100 dark:bg-sky-900/40 hover:bg-sky-200 text-sky-700 dark:text-sky-300 font-semibold text-xs transition-all"><i class="fa-solid fa-file-csv mr-1"></i>Nhập CSV</button>
+                        <button onclick="openImportModal()" class="flex-1 sm:flex-none px-3 py-2 rounded-xl bg-sky-100 dark:bg-sky-900/40 hover:bg-sky-200 text-sky-700 dark:text-sky-300 font-semibold text-xs transition-all"><i class="fa-solid fa-list-check mr-1"></i>Nhập nhiều bài</button>
                         <button id="btnDeleteGarden" onclick="deleteCurrentGarden()" class="flex-1 sm:flex-none px-3 py-2 rounded-xl bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 font-semibold text-xs transition-colors hidden">
                             <i class="fa-solid fa-trash-can"></i> Xóa Vườn
                         </button>
@@ -2156,8 +2156,8 @@
             return rows.map(r => r.map(x => x.trim())).filter(r => r.some(x => x));
         };
         const DEF = 'Khu vườn của tôi';
-        function importRows(rows) {
-            if (rows.length && /khu|chương|chuong|garden|chapter/i.test(rows[0][0] || '')) rows = rows.slice(1);
+        function importRows(rows, keepFirst) {
+            if (!keepFirst && rows.length && /khu|chương|chuong|garden|chapter/i.test(rows[0][0] || '')) rows = rows.slice(1);
             let gname = '', ng = 0, np = 0, firstIdx = -1;
             rows.forEach(r => {
                 if (r[0]) gname = r[0];
@@ -2180,18 +2180,27 @@
             p.style.cssText = 'position:fixed;inset:0;z-index:90;background:rgba(15,23,42,.6);display:flex;align-items:center;justify-content:center;padding:16px';
             const btn = 'width:100%;padding:11px;border-radius:12px;font-weight:600;border:0;margin-top:8px;';
             p.innerHTML = `<div class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white" style="width:100%;max-width:380px;padding:24px;border-radius:24px">
-                <div style="font-weight:700;font-size:18px">Nhập nội dung học từ CSV</div>
+                <div style="font-weight:700;font-size:18px">Nhập nhanh nhiều bài</div>
                 <p style="font-size:13px;color:#64748b;margin:8px 0">Mỗi dòng là một chậu hoa. <b>Cột 1</b>: tên khu vườn (chương), <b>cột 2</b>: tên bài học. Có thể làm file bằng Excel, Numbers hoặc Google Sheets rồi xuất ra CSV. Bạn cũng có thể thêm khu vườn và chậu thủ công bất cứ lúc nào.</p>
+                <p style="font-size:13px;color:#64748b;margin:8px 0 4px"><b>Cách nhanh nhất:</b> dán danh sách vào ô dưới, mỗi dòng một bài. Dòng bắt đầu bằng <b>#</b> là tên khu vườn mới; nếu không có # thì các bài được thêm vào khu vườn đang mở.</p>
+                <textarea id="kvTxt" rows="6" placeholder="# Chương 1&#10;Bài 1&#10;Bài 2&#10;# Chương 2&#10;Bài 3" style="width:100%;padding:12px;border-radius:12px;border:1px solid #cbd5e1;font-size:16px;box-sizing:border-box"></textarea>
+                <button id="kvAddTxt" style="${btn}background:#059669;color:#fff">Thêm vào danh sách</button>
                 <div id="kvImE" style="font-size:13px;min-height:16px"></div>
                 <input id="kvCsv" type="file" accept=".csv,text/csv,text/plain" style="display:none">
                 <button id="kvTpl" style="${btn}background:#e0f2fe;color:#0369a1">Tải file mẫu</button>
-                <button id="kvPickCsv" style="${btn}background:#059669;color:#fff">Chọn file CSV để nhập</button>
+                <button id="kvPickCsv" style="${btn}background:#059669;color:#fff">Hoặc nhập từ file CSV</button>
                 <button id="kvManual" style="${btn}background:#f1f5f9;color:#334155">Tự thêm thủ công</button>
                 <button id="kvImX" style="width:100%;padding:8px;background:none;border:0;color:#64748b;margin-top:4px">Đóng</button></div>`;
             document.body.appendChild(p);
             const msg = (t, ok) => { const e = p.querySelector('#kvImE'); e.textContent = t; e.style.color = ok ? '#059669' : '#dc2626'; };
             p.onclick = e => { if (e.target === p) p.remove(); };
             p.querySelector('#kvImX').onclick = () => p.remove();
+            p.querySelector('#kvAddTxt').onclick = () => {
+                const r = importRows(parseList(p.querySelector('#kvTxt').value), true);
+                if (!r) { msg('Chưa có dòng nào để thêm.', false); return; }
+                showToast('Đã thêm', `${r.ng} khu vườn mới, ${r.np} chậu mới`);
+                p.remove();
+            };
             p.querySelector('#kvManual').onclick = () => { p.remove(); openCreateGardenModal(); };
             p.querySelector('#kvTpl').onclick = () => {
                 const csv = '\ufeffkhu_vuon,bai_hoc\nChương 1 - Làm quen,Bài 1 - Giới thiệu\nChương 1 - Làm quen,Bài 2 - Khái niệm cơ bản\nChương 2 - Thực hành,Bài 3 - Bài tập đầu tiên\nChương 2 - Thực hành,Bài 4 - Ôn tập\n';
@@ -2212,6 +2221,47 @@
                 } catch (e) { msg('Không đọc được file, hãy kiểm tra lại.', false); }
             };
         };
+        function parseList(text) {
+            const rows = []; let g = '';
+            const cur = (gardensData[currentGardenIndex] || {}).title || DEF;
+            text.split(/\r?\n/).forEach(line => {
+                let t = line.trim(); if (!t) return;
+                if (t.includes('\t')) { const c = t.split('\t').map(x => x.trim()); if (c[0]) g = c[0]; if (g) rows.push([g, c[1] || '']); return; }
+                const h = t.match(/^#+\s*(.+)$/);
+                if (h) { g = h[1].trim(); rows.push([g, '']); return; }
+                t = t.replace(/^[-*•]\s+/, '').replace(/^\d+[.)]\s+/, '');
+                rows.push([g || cur, t]);
+            });
+            return rows;
+        }
+        window.openPwModal = function () {
+            const p = document.createElement('div');
+            p.style.cssText = 'position:fixed;inset:0;z-index:90;background:rgba(15,23,42,.6);display:flex;align-items:center;justify-content:center;padding:16px';
+            const fld = 'width:100%;padding:12px;border-radius:12px;border:1px solid #cbd5e1;font-size:16px;margin-top:8px;box-sizing:border-box';
+            p.innerHTML = `<div class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white" style="width:100%;max-width:340px;padding:24px;border-radius:24px">
+                <div style="font-weight:700;font-size:18px">Đổi mật khẩu</div>
+                <input id="kvO" type="password" style="${fld}" placeholder="Mật khẩu hiện tại" autocomplete="current-password">
+                <input id="kvN" type="password" style="${fld}" placeholder="Mật khẩu mới (từ 6 ký tự)" autocomplete="new-password">
+                <input id="kvN2" type="password" style="${fld}" placeholder="Nhập lại mật khẩu mới" autocomplete="new-password">
+                <div id="kvPE" style="font-size:13px;min-height:18px;margin-top:8px"></div>
+                <button id="kvPS" style="width:100%;padding:11px;border-radius:12px;background:#059669;color:#fff;font-weight:600;border:0">Lưu mật khẩu mới</button>
+                <button id="kvPX" style="width:100%;padding:8px;background:none;border:0;color:#64748b;margin-top:4px">Đóng</button></div>`;
+            document.body.appendChild(p);
+            const say = (t, ok) => { const e = p.querySelector('#kvPE'); e.textContent = t; e.style.color = ok ? '#059669' : '#dc2626'; };
+            p.onclick = e => { if (e.target === p) p.remove(); };
+            p.querySelector('#kvPX').onclick = () => p.remove();
+            p.querySelector('#kvPS').onclick = async () => {
+                const o = p.querySelector('#kvO').value, n = p.querySelector('#kvN').value;
+                if (n !== p.querySelector('#kvN2').value) { say('Hai mật khẩu mới chưa giống nhau.', false); return; }
+                try {
+                    const res = await fetch(API + '?a=password', { method: 'PUT', headers: { 'content-type': 'application/json', authorization: 'Bearer ' + g('auth_token') }, body: JSON.stringify({ oldPassword: o, newPassword: n }) });
+                    const j = await res.json();
+                    if (!res.ok) { say(j.error || 'Không đổi được mật khẩu.', false); return; }
+                    say('Đã đổi mật khẩu.', true);
+                    setTimeout(() => p.remove(), 1200);
+                } catch (e) { say('Không kết nối được máy chủ.', false); }
+            };
+        };
         av.onclick = () => {
             const p = document.createElement('div');
             p.style.cssText = 'position:fixed;inset:0;z-index:90;background:rgba(15,23,42,.6);display:flex;align-items:center;justify-content:center;padding:16px';
@@ -2221,13 +2271,15 @@
                 <div id="kvAvE" style="color:#dc2626;font-size:13px;min-height:16px"></div>
                 <input id="kvFile" type="file" accept="image/*" style="display:none">
                 <button id="kvPick" style="width:100%;padding:11px;border-radius:12px;background:#059669;color:#fff;font-weight:600;border:0;margin-top:8px">Đổi ảnh đại diện</button>
-                <button id="kvImp" style="width:100%;padding:11px;border-radius:12px;background:#e0f2fe;color:#0369a1;font-weight:600;border:0;margin-top:8px">Nhập nội dung từ CSV</button>
+                <button id="kvImp" style="width:100%;padding:11px;border-radius:12px;background:#e0f2fe;color:#0369a1;font-weight:600;border:0;margin-top:8px">Nhập nhiều bài</button>
+                <button id="kvPw" style="width:100%;padding:11px;border-radius:12px;background:#f1f5f9;color:#334155;font-weight:600;border:0;margin-top:8px">Đổi mật khẩu</button>
                 <button id="kvOut" style="width:100%;padding:11px;border-radius:12px;background:#f1f5f9;color:#334155;font-weight:600;border:0;margin-top:8px">Đăng xuất</button>
                 <button id="kvX" style="width:100%;padding:8px;background:none;border:0;color:#64748b;margin-top:4px">Đóng</button></div>`;
             document.body.appendChild(p);
             p.onclick = e => { if (e.target === p) p.remove(); };
             p.querySelector('#kvX').onclick = () => p.remove();
             p.querySelector('#kvImp').onclick = () => { p.remove(); openImportModal(); };
+            p.querySelector('#kvPw').onclick = () => { p.remove(); openPwModal(); };
             p.querySelector('#kvOut').onclick = () => { if (confirm('Đăng xuất khỏi tài khoản này?')) window.kvAuthLogout(); };
             const f = p.querySelector('#kvFile');
             p.querySelector('#kvPick').onclick = () => f.click();
