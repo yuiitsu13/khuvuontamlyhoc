@@ -40,6 +40,16 @@ export default async (req) => {
   const u = name && (await users().get(name, { type: "json" }));
   if (!u) return J({ error: "unauthorized" }, 401);
 
+  if (req.method === "PUT" && a === "password") {
+    let b; try { b = await req.json(); } catch { return J({ error: "bad json" }, 400); }
+    const oldPw = String(b.oldPassword || ""), np = String(b.newPassword || "");
+    if (!timingSafeEqual(Buffer.from(hash(oldPw, u.salt)), Buffer.from(u.hash))) return J({ error: "Mật khẩu hiện tại không đúng" }, 403);
+    if (np.length < 6 || np.length > 100) return J({ error: "Mật khẩu mới cần từ 6 ký tự" }, 400);
+    u.salt = randomBytes(16).toString("hex"); u.hash = hash(np, u.salt);
+    await users().setJSON(name, u);
+    return J({ ok: true });
+  }
+
   if (req.method === "PUT" && a === "avatar") {
     let b; try { b = await req.json(); } catch { return J({ error: "bad json" }, 400); }
     if (typeof b.avatar !== "string" || !b.avatar.startsWith("data:image/jpeg;base64,") || b.avatar.length > 80000) return J({ error: "Ảnh không hợp lệ" }, 400);
