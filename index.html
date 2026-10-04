@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khu Vườn Học Tập</title>
+    <title>Pomodopamine · Khu vườn tri thức do bạn ươm mầm</title>
     <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="#059669">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="Khu Vườn">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <meta name="apple-mobile-web-app-title" content="Pomodopamine">
+    <link rel="icon" href="/icon-192.png" type="image/png">
     <link rel="apple-touch-icon" href="/icon-192.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Patrick+Hand&family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <script>
@@ -24,6 +24,8 @@
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         hand: ['Patrick Hand', 'cursive'],
+                        brand: ['"Baloo 2"', 'Inter', 'sans-serif'],
+                        slogan: ['"Be Vietnam Pro"', 'Inter', 'sans-serif'],
                     }
                 }
             }
@@ -113,14 +115,11 @@
     <header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-emerald-100 dark:border-slate-800 sm:sticky top-0 z-40 transition-colors">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2 sm:gap-4">
             <!-- App Branding -->
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 animate-float">
-                    <i class="fa-solid fa-seedling text-xl"></i>
-                </div>
-                <div>
-                    <h1 class="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
-                        Khu Vườn Học Tập
-                    </h1>
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="flex-shrink-0 animate-float drop-shadow-md"><img src="/logo.png" width="46" height="46" alt="Pomodopamine" class="rounded-xl"></div>
+                <div class="min-w-0">
+                    <h1 class="font-brand font-extrabold text-2xl sm:text-[1.7rem] leading-none tracking-tight"><span class="bg-gradient-to-r from-blue-700 to-indigo-500 bg-clip-text text-transparent">Pomo</span><span class="bg-gradient-to-r from-lime-500 to-emerald-600 bg-clip-text text-transparent">dopamine</span></h1>
+                    <p class="font-slogan text-[10.5px] sm:text-xs text-slate-500 dark:text-slate-400 mt-1 leading-tight">Khu vườn tri thức do bạn <span class="font-semibold text-emerald-600 dark:text-emerald-400">ươm mầm</span> 🌱</p>
                 </div>
             </div>
 
@@ -189,6 +188,7 @@
                 
             </div>
         </div>
+    <div class="h-1 bg-gradient-to-r from-blue-600 via-emerald-400 to-amber-600"></div>
     </header>
 
     <main class="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start transition-all duration-500">
@@ -1586,7 +1586,7 @@
         function updateTabTitle() {
             if (isRunning) {
                 const m = String(Math.floor(timerSeconds / 60)).padStart(2, '0'), s = String(timerSeconds % 60).padStart(2, '0');
-                document.title = `${m}:${s} · ${currentMode === 'focus' ? 'Tập trung' : 'Nghỉ'} · Khu Vườn Học Tập`;
+                document.title = `${m}:${s} · ${currentMode === 'focus' ? 'Tập trung' : 'Nghỉ'} · Pomodopamine`;
             } else {
                 document.title = BASE_TITLE;
             }
@@ -2293,40 +2293,65 @@
         const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
         const box = document.createElement('div');
-        box.className = 'bg-emerald-50 dark:bg-slate-950';
+        box.className = 'bg-gradient-to-br from-emerald-50 via-white to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950';
         box.style.cssText = 'position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:16px;overflow:auto';
         document.body.appendChild(box);
         const inp = 'width:100%;padding:12px;border-radius:12px;border:1px solid #cbd5e1;font-size:16px;margin-top:8px;box-sizing:border-box';
 
+        window.pmdLogo = px => `<img src="/logo.png" width="${px}" height="${px}" alt="Pomodopamine" style="border-radius:22%">`;
+        const fld = 'w-full px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/90 dark:bg-slate-800 text-slate-800 dark:text-white text-base outline-none focus:ring-2 focus:ring-emerald-500 mt-2';
+        function finishAuth(j, welcome) {
+            const last = g('auth_last_user');
+            if (last !== j.user.name) ['study_gardens_141_v5', 'sync_rev', 'sync_base', 'sync_dirty'].forEach(rm);   // tài khoản khác: bỏ dữ liệu cục bộ của người trước
+            if (welcome) st('kv_welcome', '1');
+            st('auth_token', j.token); st('auth_user', JSON.stringify(j.user)); st('auth_last_user', j.user.name);
+            location.reload();
+        }
         function showAuth() {
             box.style.display = 'flex';
-            const login = mode === 'login';
-            box.innerHTML = `<div class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white" style="width:100%;max-width:360px;padding:24px;border-radius:24px;box-shadow:0 8px 30px rgba(0,0,0,.12)">
-                <div style="text-align:center;font-size:40px">🌱</div>
-                <h2 style="text-align:center;font-weight:700;font-size:20px;margin:4px 0 12px">Khu Vườn Học Tập</h2>
-                <form id="kvForm">
-                    <input id="kvU" style="${inp}" placeholder="Tên đăng nhập" autocapitalize="none" autocorrect="off" autocomplete="username" required>
-                    <input id="kvP" type="password" style="${inp}" placeholder="Mật khẩu (từ 6 ký tự)" autocomplete="${login ? 'current-password' : 'new-password'}" required>
-                    <div id="kvE" style="color:#dc2626;font-size:13px;min-height:18px;margin-top:8px"></div>
-                    <button id="kvB" type="submit" style="width:100%;padding:12px;border-radius:12px;background:#059669;color:#fff;font-weight:700;font-size:16px;border:0;margin-top:4px">${login ? 'Đăng nhập' : 'Tạo tài khoản'}</button>
-                </form>
-                <button id="kvT" type="button" style="width:100%;margin-top:12px;background:none;border:0;color:#059669;font-size:14px">${login ? 'Chưa có tài khoản? Tạo mới' : 'Đã có tài khoản? Đăng nhập'}</button>
+            const M = {
+                login: { btn: 'Đăng nhập', sw: 'Chưa có tài khoản? <b>Tạo mới</b>', swTo: 'register' },
+                register: { btn: 'Tạo tài khoản', sw: 'Đã có tài khoản? <b>Đăng nhập</b>', swTo: 'login' },
+                forgot: { btn: 'Đặt lại mật khẩu', sw: '← Quay lại đăng nhập', swTo: 'login' }
+            }[mode];
+            const pwAuto = mode === 'login' ? 'current-password' : 'new-password';
+            box.innerHTML = `
+            <div class="relative w-full max-w-sm">
+                <div class="absolute -top-10 -left-8 w-40 h-40 rounded-full bg-blue-300/40 dark:bg-blue-500/10 blur-3xl"></div>
+                <div class="absolute -bottom-10 -right-8 w-44 h-44 rounded-full bg-emerald-300/50 dark:bg-emerald-500/10 blur-3xl"></div>
+                <div class="relative text-center mb-5">
+                    <div class="inline-block animate-float drop-shadow-xl">${window.pmdLogo(88)}</div>
+                    <h1 class="font-brand font-extrabold text-4xl leading-none mt-1 tracking-tight"><span class="bg-gradient-to-r from-blue-700 to-indigo-500 bg-clip-text text-transparent">Pomo</span><span class="bg-gradient-to-r from-lime-500 to-emerald-600 bg-clip-text text-transparent">dopamine</span></h1>
+                    <p class="font-slogan text-sm text-slate-500 dark:text-slate-400 mt-2">Khu vườn tri thức do bạn <span class="font-semibold text-emerald-600 dark:text-emerald-400">ươm mầm</span> 🌱</p>
+                </div>
+                <div class="relative bg-white/90 dark:bg-slate-900/90 backdrop-blur-md text-slate-800 dark:text-white p-6 rounded-3xl shadow-2xl border border-emerald-100 dark:border-slate-700">
+                    <h2 class="font-brand font-bold text-xl text-center">${mode === 'forgot' ? 'Quên mật khẩu?' : mode === 'login' ? 'Chào mừng trở lại!' : 'Bắt đầu gieo hạt'}</h2>
+                    ${mode === 'forgot' ? '<p class="font-slogan text-xs text-slate-500 text-center mt-1">Nhập tên đăng nhập và mã passcode để đặt mật khẩu mới.</p>' : ''}
+                    <form id="kvForm" class="mt-3">
+                        <input id="kvU" class="${fld}" placeholder="Tên đăng nhập" autocapitalize="none" autocorrect="off" autocomplete="username" required>
+                        ${mode === 'forgot' ? `<input id="kvC" class="${fld}" placeholder="Mã passcode" inputmode="numeric" autocomplete="off" required>` : ''}
+                        <input id="kvP" type="password" class="${fld}" placeholder="${mode === 'forgot' ? 'Mật khẩu mới (từ 6 ký tự)' : 'Mật khẩu' + (mode === 'register' ? ' (từ 6 ký tự)' : '')}" autocomplete="${pwAuto}" required>
+                        <div id="kvE" class="text-red-600 text-sm min-h-[20px] mt-2"></div>
+                        <button id="kvB" type="submit" class="w-full py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-700 hover:to-teal-600 text-white font-bold text-base shadow-lg shadow-emerald-600/25 transition-all active:scale-95 mt-1">${M.btn}</button>
+                    </form>
+                    ${mode === 'login' ? '<button id="kvF" type="button" class="w-full mt-3 text-sm text-slate-500 dark:text-slate-400 hover:text-rose-500">Quên mật khẩu?</button>' : ''}
+                    <button id="kvT" type="button" class="w-full mt-2 text-sm text-emerald-600 dark:text-emerald-400">${M.sw}</button>
+                </div>
             </div>`;
-            document.getElementById('kvT').onclick = () => { mode = login ? 'register' : 'login'; showAuth(); };
+            document.getElementById('kvT').onclick = () => { mode = M.swTo; showAuth(); };
+            const f = document.getElementById('kvF'); if (f) f.onclick = () => { mode = 'forgot'; showAuth(); };
             document.getElementById('kvForm').onsubmit = async e => {
                 e.preventDefault();
                 const b = document.getElementById('kvB'), er = document.getElementById('kvE');
                 b.disabled = true; er.textContent = '';
+                const v = id => (document.getElementById(id) || {}).value;
                 try {
-                    const res = await fetch(API + '?a=' + mode, { method: 'POST', headers: { 'content-type': 'application/json' },
-                        body: JSON.stringify({ username: document.getElementById('kvU').value, password: document.getElementById('kvP').value }) });
+                    const forgot = mode === 'forgot';
+                    const res = await fetch(API + '?a=' + (forgot ? 'reset' : mode), { method: 'POST', headers: { 'content-type': 'application/json' },
+                        body: JSON.stringify(forgot ? { username: v('kvU'), passcode: v('kvC'), newPassword: v('kvP') } : { username: v('kvU'), password: v('kvP') }) });
                     const j = await res.json();
                     if (!res.ok) { er.textContent = j.error || 'Có lỗi, thử lại nhé'; b.disabled = false; return; }
-                    const last = g('auth_last_user');
-                    if (last !== j.user.name) ['study_gardens_141_v5', 'sync_rev', 'sync_base', 'sync_dirty'].forEach(rm);   // tài khoản khác: bỏ dữ liệu cục bộ của người trước
-                    if (mode === 'register') st('kv_welcome', '1');
-                    st('auth_token', j.token); st('auth_user', JSON.stringify(j.user)); st('auth_last_user', j.user.name);
-                    location.reload();
+                    finishAuth(j, mode === 'register');
                 } catch (x) { er.textContent = 'Không kết nối được máy chủ'; b.disabled = false; }
             };
         }
