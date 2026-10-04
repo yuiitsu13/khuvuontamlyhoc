@@ -3,7 +3,7 @@ import book from "./book.json";
 import { scryptSync, randomBytes, timingSafeEqual } from "node:crypto";
 
 const J = (b, s = 200) => new Response(JSON.stringify(b), { status: s, headers: { "content-type": "application/json", "cache-control": "no-store" } });
-const users = () => getStore("users"), sess = () => getStore("sessions"), prog = () => getStore("progress");
+const users = () => getStore({ name: "users", consistency: "strong" }), sess = () => getStore({ name: "sessions", consistency: "strong" }), prog = () => getStore({ name: "progress", consistency: "strong" });
 const hash = (pw, salt) => scryptSync(pw, salt, 32).toString("hex");
 const SEED = { name: "anduy13", pw: "12345" };   // tài khoản có sẵn nội dung tâm lý học
 const pub = (u) => ({ name: u.name, avatar: u.avatar || null });
