@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khu Vườn Học Tập - 142 Chủ Đề Tâm Lý Học & Thư Giãn</title>
+    <title>Khu Vườn Học Tập</title>
     <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="#059669">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -230,6 +230,7 @@
                         <button onclick="openCreateGardenModal()" class="flex-1 sm:flex-none px-3 py-2 rounded-xl bg-teal-100 dark:bg-teal-900/40 hover:bg-teal-200 dark:hover:bg-teal-800/60 text-teal-700 dark:text-teal-300 font-semibold text-xs transition-colors">
                             <i class="fa-solid fa-folder-plus"></i> Vườn Mới
                         </button>
+                        <button onclick="openImportModal()" class="flex-1 sm:flex-none px-3 py-2 rounded-xl bg-sky-100 dark:bg-sky-900/40 hover:bg-sky-200 text-sky-700 dark:text-sky-300 font-semibold text-xs transition-all"><i class="fa-solid fa-file-csv mr-1"></i>Nhập CSV</button>
                         <button id="btnDeleteGarden" onclick="deleteCurrentGarden()" class="flex-1 sm:flex-none px-3 py-2 rounded-xl bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 font-semibold text-xs transition-colors hidden">
                             <i class="fa-solid fa-trash-can"></i> Xóa Vườn
                         </button>
@@ -511,278 +512,10 @@
     </div>
 
     <script>
-        const complete141BookData = [
-            {
-                title: "I. Tâm lý học là gì?",
-                plots: [
-                    { subject: "Tâm lý học là gì? — tr. 10", sessions: [] },
-                    { subject: "Quá trình phát triển của tâm lý học — tr. 12", sessions: [] },
-                    { subject: "Học thuyết phân tâm học — tr. 14", sessions: [] },
-                    { subject: "Tiếp cận hành vi học — tr. 16", sessions: [] },
-                    { subject: "Thuyết nhân bản — tr. 18", sessions: [] },
-                    { subject: "Tâm lý học nhận thức — tr. 20", sessions: [] },
-                    { subject: "Tâm lý sinh học — tr. 22", sessions: [] },
-                    { subject: "Não bộ hoạt động như thế nào — tr. 24", sessions: [] },
-                    { subject: "Trí nhớ hoạt động như thế nào — tr. 30", sessions: [] },
-                    { subject: "Cảm xúc hoạt động như thế nào — tr. 32", sessions: [] }
-                ]
-            },
-            {
-                title: "II.A Rối loạn khí sắc và lo âu",
-                plots: [
-                    { subject: "Chẩn đoán rối loạn — tr. 36", sessions: [] },
-                    { subject: "Trầm cảm — tr. 38", sessions: [] },
-                    { subject: "Rối loạn lưỡng cực — tr. 40", sessions: [] },
-                    { subject: "Bệnh tâm thần thời kỳ mang thai — tr. 42", sessions: [] },
-                    { subject: "Rối loạn mất điều chỉnh tâm trạng muốn gây rối — tr. 44", sessions: [] },
-                    { subject: "Rối loạn cảm xúc theo mùa — tr. 45", sessions: [] },
-                    { subject: "Rối loạn hoảng loạn — tr. 46", sessions: [] },
-                    { subject: "Những ám sợ chuyên biệt — tr. 48", sessions: [] },
-                    { subject: "Ám sợ khoảng trống — tr. 50", sessions: [] },
-                    { subject: "Ám sợ không gian kín — tr. 51", sessions: [] },
-                    { subject: "Rối loạn lo âu lan tỏa — tr. 52", sessions: [] },
-                    { subject: "Rối loạn lo âu xã hội — tr. 53", sessions: [] },
-                    { subject: "Rối loạn lo âu chia tách — tr. 54", sessions: [] },
-                    { subject: "Chứng câm chọn lọc — tr. 55", sessions: [] }
-                ]
-            },
-            {
-                title: "II.B Rối loạn ám ảnh, liên quan sang chấn và stress",
-                plots: [
-                    { subject: "Rối loạn ám ảnh cưỡng chế — tr. 56", sessions: [] },
-                    { subject: "Rối loạn tích trữ — tr. 58", sessions: [] },
-                    { subject: "Rối loạn khiếm khuyết cơ thể / mặc cảm ngoại hình — tr. 59", sessions: [] },
-                    { subject: "Rối loạn cạy da và bứt tóc — tr. 60", sessions: [] },
-                    { subject: "Rối loạn lo âu bệnh tật — tr. 61", sessions: [] },
-                    { subject: "Rối loạn căng thẳng hậu sang chấn — tr. 62", sessions: [] },
-                    { subject: "Phản ứng căng thẳng cấp tính — tr. 63", sessions: [] },
-                    { subject: "Rối loạn điều chỉnh — tr. 64", sessions: [] }
-                ]
-            },
-            {
-                title: "II.C Rối loạn phát triển thần kinh",
-                plots: [
-                    { subject: "Rối loạn phản ứng gắn bó — tr. 65", sessions: [] },
-                    { subject: "Rối loạn tăng động giảm chú ý — tr. 66", sessions: [] },
-                    { subject: "Rối loạn phổ tự kỷ — tr. 68", sessions: [] }
-                ]
-            },
-            {
-                title: "II.D Rối loạn loạn thần",
-                plots: [
-                    { subject: "Tâm thần phân liệt — tr. 70", sessions: [] },
-                    { subject: "Rối loạn phân liệt cảm xúc — tr. 72", sessions: [] },
-                    { subject: "Hội chứng căng trương lực — tr. 73", sessions: [] },
-                    { subject: "Rối loạn hoang tưởng — tr. 74", sessions: [] }
-                ]
-            },
-            {
-                title: "II.E Rối loạn nhận thức",
-                plots: [
-                    { subject: "Chứng sa sút trí tuệ — tr. 76", sessions: [] },
-                    { subject: "Chứng tổn thương não mãn tính do chấn thương — tr. 78", sessions: [] },
-                    { subject: "Mê sảng (trạng thái lú lẫn cấp) — tr. 79", sessions: [] }
-                ]
-            },
-            {
-                title: "II.F Rối loạn liên quan chất và kiểm soát xung động",
-                plots: [
-                    { subject: "Rối loạn sử dụng chất — tr. 80", sessions: [] },
-                    { subject: "Rối loạn kiểm soát xung động và nghiện — tr. 82", sessions: [] },
-                    { subject: "Rối loạn cờ bạc — tr. 83", sessions: [] },
-                    { subject: "Chứng ăn cắp vặt — tr. 84", sessions: [] },
-                    { subject: "Chứng cuồng phóng hỏa — tr. 85", sessions: [] }
-                ]
-            },
-            {
-                title: "II.G Rối loạn phân ly",
-                plots: [
-                    { subject: "Rối loạn bản thể / danh tính phân ly — tr. 88", sessions: [] },
-                    { subject: "Giải thể nhân cách và tri giác sai thực tại — tr. 88", sessions: [] },
-                    { subject: "Quên phân ly — tr. 88", sessions: [] }
-                ]
-            },
-            {
-                title: "II.H Các nhóm rối loạn khác",
-                plots: [
-                    { subject: "Chán ăn tâm thần — tr. 88", sessions: [] },
-                    { subject: "Chứng ăn ói — tr. 88", sessions: [] },
-                    { subject: "Rối loạn ăn vô độ — tr. 88", sessions: [] },
-                    { subject: "Hội chứng pica — tr. 88", sessions: [] },
-                    { subject: "Các dạng rối loạn giao tiếp — tr. 88", sessions: [] },
-                    { subject: "Rối loạn giấc ngủ — tr. 88", sessions: [] },
-                    { subject: "Rối loạn tic — tr. 88", sessions: [] },
-                    { subject: "Rối loạn nhân cách — tr. 88", sessions: [] },
-                    { subject: "Các rối loạn khác — tr. 88", sessions: [] }
-                ]
-            },
-            {
-                title: "III. Các liệu pháp trị liệu chữa lành",
-                plots: [
-                    { subject: "Trị liệu — tr. 110", sessions: [] },
-                    { subject: "Sức khỏe và trị liệu — tr. 112", sessions: [] },
-                    { subject: "Sức khỏe thể chất và tâm thần — tr. 114", sessions: [] },
-                    { subject: "Vai trò của trị liệu — tr. 116", sessions: [] }
-                ]
-            },
-            {
-                title: "III.A Liệu pháp tâm động học",
-                plots: [
-                    { subject: "Liệu pháp tâm động học — tr. 118", sessions: [] },
-                    { subject: "Phân tâm học — tr. 119", sessions: [] },
-                    { subject: "Trị liệu theo trường phái Jung — tr. 120", sessions: [] },
-                    { subject: "Tâm lý học bản ngã và quan hệ đối tượng — tr. 121", sessions: [] },
-                    { subject: "Phân tích tương giao — tr. 121", sessions: [] }
-                ]
-            },
-            {
-                title: "III.B Liệu pháp nhận thức – hành vi",
-                plots: [
-                    { subject: "Liệu pháp nhận thức và hành vi — tr. 122", sessions: [] },
-                    { subject: "Liệu pháp hành vi — tr. 124", sessions: [] },
-                    { subject: "Liệu pháp nhận thức — tr. 124", sessions: [] },
-                    { subject: "Liệu pháp nhận thức – hành vi — tr. 125", sessions: [] },
-                    { subject: "CBT làn sóng thứ ba — tr. 126", sessions: [] },
-                    { subject: "Liệu pháp xử lý nhận thức — tr. 127", sessions: [] },
-                    { subject: "Liệu pháp hành vi cảm xúc duy lý — tr. 127", sessions: [] },
-                    { subject: "Các phương pháp sử dụng trong CBT — tr. 128", sessions: [] },
-                    { subject: "Chú tâm — tr. 129", sessions: [] }
-                ]
-            },
-            {
-                title: "III.C Các liệu pháp nhân bản",
-                plots: [
-                    { subject: "Các liệu pháp nhân bản — tr. 130", sessions: [] },
-                    { subject: "Liệu pháp người bệnh trọng tâm — tr. 132", sessions: [] },
-                    { subject: "Liệu pháp hiện thực — tr. 132", sessions: [] },
-                    { subject: "Liệu pháp hiện sinh — tr. 133", sessions: [] },
-                    { subject: "Liệu pháp cấu trúc — tr. 133", sessions: [] },
-                    { subject: "Liệu pháp tập trung vào cảm xúc — tr. 134", sessions: [] },
-                    { subject: "Liệu pháp ngắn tập trung vào giải pháp — tr. 134", sessions: [] }
-                ]
-            },
-            {
-                title: "III.D Các liệu pháp khác",
-                plots: [
-                    { subject: "Liệu pháp thân thể — tr. 135", sessions: [] },
-                    { subject: "Liệu pháp giải mẫn cảm và tái nhận thức bằng chuyển động mắt — tr. 136", sessions: [] },
-                    { subject: "Trị liệu thôi miên — tr. 136", sessions: [] },
-                    { subject: "Các liệu pháp dựa trên nghệ thuật — tr. 137", sessions: [] },
-                    { subject: "Liệu pháp hỗ trợ nhờ động vật — tr. 137", sessions: [] }
-                ]
-            },
-            {
-                title: "III.E Liệu pháp hệ thống và sinh học",
-                plots: [
-                    { subject: "Liệu pháp hệ thống — tr. 138", sessions: [] },
-                    { subject: "Liệu pháp hệ thống gia đình — tr. 139", sessions: [] },
-                    { subject: "Liệu pháp gia đình chiến lược — tr. 140", sessions: [] },
-                    { subject: "Liệu pháp phát triển kép — tr. 141", sessions: [] },
-                    { subject: "Liệu pháp bối cảnh — tr. 141", sessions: [] },
-                    { subject: "Liệu pháp sinh học — tr. 142", sessions: [] }
-                ]
-            },
-            {
-                title: "IV.A Tâm lý học về bản thể và bản ngã",
-                plots: [
-                    { subject: "Mở đầu phần — tr. 144", sessions: [] },
-                    { subject: "Tâm lý học về bản thể bản ngã — tr. 146", sessions: [] },
-                    { subject: "Sự hình thành bản thể — tr. 148", sessions: [] },
-                    { subject: "Nhân cách — tr. 150", sessions: [] },
-                    { subject: "Sự hiện thực hóa bản ngã — tr. 152", sessions: [] }
-                ]
-            },
-            {
-                title: "IV.B Tâm lý học về mối quan hệ",
-                plots: [
-                    { subject: "Tâm lý học về mối quan hệ — tr. 154", sessions: [] },
-                    { subject: "Tâm lý học và sự gắn bó — tr. 156", sessions: [] },
-                    { subject: "Khoa học về tình yêu — tr. 158", sessions: [] },
-                    { subject: "Hẹn hò diễn ra như thế nào — tr. 160", sessions: [] },
-                    { subject: "Tâm lý học và các giai đoạn của mối quan hệ — tr. 162", sessions: [] }
-                ]
-            },
-            {
-                title: "IV.C Tâm lý học trong giáo dục",
-                plots: [
-                    { subject: "Tâm lý học trong giáo dục — tr. 166", sessions: [] },
-                    { subject: "Các thuyết giáo dục — tr. 168", sessions: [] },
-                    { subject: "Tâm lý học trong dạy học — tr. 172", sessions: [] },
-                    { subject: "Đánh giá vấn đề — tr. 174", sessions: [] }
-                ]
-            },
-            {
-                title: "IV.D Tâm lý học công sở",
-                plots: [
-                    { subject: "Tâm lý học công sở — tr. 176", sessions: [] },
-                    { subject: "Lựa chọn ứng viên tốt nhất — tr. 178", sessions: [] },
-                    { subject: "Quản lý nhân tài — tr. 180", sessions: [] },
-                    { subject: "Phát triển đội ngũ — tr. 182", sessions: [] },
-                    { subject: "Lãnh đạo — tr. 184", sessions: [] },
-                    { subject: "Văn hóa và sự thay đổi tổ chức — tr. 186", sessions: [] }
-                ]
-            },
-            {
-                title: "IV.E Tâm lý học HFE",
-                plots: [
-                    { subject: "Tâm lý học HFE — tr. 188", sessions: [] },
-                    { subject: "Thiết kế hiển thị — tr. 190", sessions: [] },
-                    { subject: "Lỗi con người và sự phòng ngừa — tr. 192", sessions: [] }
-                ]
-            },
-            {
-                title: "IV.F Tâm lý học tư pháp",
-                plots: [
-                    { subject: "Tâm lý học tư pháp — tr. 194", sessions: [] },
-                    { subject: "Tâm lý học và điều tra tội phạm — tr. 196", sessions: [] },
-                    { subject: "Tâm lý học trong phòng xử án — tr. 200", sessions: [] },
-                    { subject: "Tâm lý học trong nhà tù — tr. 202", sessions: [] }
-                ]
-            },
-            {
-                title: "IV.G Tâm lý học chính trị",
-                plots: [
-                    { subject: "Tâm lý học chính trị — tr. 204", sessions: [] },
-                    { subject: "Hành vi bầu cử — tr. 206", sessions: [] },
-                    { subject: "Sự tuân lệnh và việc ra quyết định — tr. 208", sessions: [] },
-                    { subject: "Chủ nghĩa dân tộc — tr. 210", sessions: [] }
-                ]
-            },
-            {
-                title: "IV.H Tâm lý học trong cộng đồng",
-                plots: [
-                    { subject: "Tâm lý học trong cộng đồng — tr. 214", sessions: [] },
-                    { subject: "Cộng đồng hoạt động như thế nào — tr. 216", sessions: [] },
-                    { subject: "Trao quyền — tr. 218", sessions: [] },
-                    { subject: "Cộng đồng đô thị — tr. 220", sessions: [] },
-                    { subject: "An toàn trong cộng đồng — tr. 222", sessions: [] }
-                ]
-            },
-            {
-                title: "IV.I Tâm lý học người tiêu dùng",
-                plots: [
-                    { subject: "Tâm lý học người tiêu dùng — tr. 224", sessions: [] },
-                    { subject: "Hiểu về hành vi người tiêu dùng — tr. 226", sessions: [] },
-                    { subject: "Thay đổi hành vi người tiêu dùng — tr. 228", sessions: [] },
-                    { subject: "Khoa học thần kinh người tiêu dùng — tr. 230", sessions: [] },
-                    { subject: "Sức mạnh của thương hiệu — tr. 232", sessions: [] },
-                    { subject: "Quyền năng của người nổi tiếng — tr. 234", sessions: [] }
-                ]
-            },
-            {
-                title: "IV.J Tâm lý học thể thao",
-                plots: [
-                    { subject: "Tâm lý học thể thao — tr. 236", sessions: [] },
-                    { subject: "Cải thiện kỹ năng — tr. 238", sessions: [] },
-                    { subject: "Giữ vững động lực — tr. 240", sessions: [] },
-                    { subject: "Vào trạng thái “xuất thần” — tr. 242", sessions: [] },
-                    { subject: "Lo âu khi thi đấu / biểu diễn — tr. 244", sessions: [] }
-                ]
-            }
-        ];
+        const complete141BookData = [];
 
         // Số vườn theo mục lục (các vườn do người dùng tự tạo nằm phía sau và có thể xóa)
-        const BOOK_GARDEN_COUNT = complete141BookData.length;
+        const BOOK_GARDEN_COUNT = 0;
         const plotKey = s => s.replace(/\s*—\s*tr\.\s*\d+\s*$/, '').trim().toLowerCase();
 
         function loadGardensData() {
@@ -790,7 +523,7 @@
                 const saved = JSON.parse(localStorage.getItem('study_gardens_141_v5'));
                 if (Array.isArray(saved) && saved.length) return saved;
             } catch (e) {}
-            const fresh = JSON.parse(JSON.stringify(complete141BookData));
+            const fresh = [{ title: 'Khu vườn của tôi', plots: [] }];
             let old = null;
             try { old = JSON.parse(localStorage.getItem('study_gardens_141_v4')); } catch (e) {}
             if (!Array.isArray(old)) return fresh;
@@ -1339,6 +1072,7 @@
         function deleteCurrentGarden() {
             if(currentGardenIndex >= BOOK_GARDEN_COUNT && gardensData.length > BOOK_GARDEN_COUNT) {
                 gardensData.splice(currentGardenIndex, 1);
+                if (!gardensData.length) gardensData.push({ title: 'Khu vườn của tôi', plots: [] });
                 currentGardenIndex = 0;
                 saveData();
                 renderGardenCarousel();
@@ -2175,7 +1909,7 @@
     // ===== Đồng bộ tiến độ học giữa các thiết bị (Netlify Functions + Netlify Blobs) =====
     (function () {
         // Điền sẵn một mã vào đây nếu muốn mọi thiết bị tự đồng bộ, không phải nhập mã.
-        const DEFAULT_SYNC_CODE = 'kvht-5cFqwkiPzPDM-As6L4Nfbuua';
+        const DEFAULT_SYNC_CODE = '';
         const API = '/api/progress';
         const LS_CODE = 'sync_code', LS_REV = 'sync_rev', LS_DIRTY = 'sync_dirty', LS_ASKED = 'sync_asked';
         const STORE_KEY = 'study_gardens_141_v5';
@@ -2183,7 +1917,7 @@
         const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
         const lsDel = k => { try { localStorage.removeItem(k); } catch (e) {} };
 
-        let code = lsGet(LS_CODE) || DEFAULT_SYNC_CODE;
+        let code = lsGet('auth_token') || '';
         let syncing = false, pushTimer = null, state = code ? 'idle' : 'off';
 
         // Không có nút đồng bộ: mọi thứ chạy tự động. Giữ hàm render rỗng để mã bên dưới không phải sửa.
@@ -2204,10 +1938,11 @@
         async function api(method, body) {
             const res = await fetch(API, {
                 method,
-                headers: { 'x-sync-code': code, 'content-type': 'application/json' },
+                headers: { 'authorization': 'Bearer ' + code, 'content-type': 'application/json' },
                 body: body ? JSON.stringify(body) : undefined,
                 cache: 'no-store'
             });
+            if (res.status === 401) { if (window.kvAuthLogout) window.kvAuthLogout(); throw new Error('401'); }
             if (res.status === 409) return { conflict: true, remote: await res.json() };
             if (!res.ok) throw new Error('HTTP ' + res.status);
             return res.json();
@@ -2225,6 +1960,7 @@
             return set;
         }
         function merge(base, local, remote) {
+            local = local.filter(g => !(g.title === 'Khu vườn của tôi' && !(g.plots || []).length && remote.length));
             const out = clone(remote);
             local.forEach(lg => {
                 const og = out.find(g => g.title === lg.title);
@@ -2270,6 +2006,7 @@
             try {
                 for (let attempt = 0; attempt < 3; attempt++) {
                     const r = await api('GET');
+                    if (r && r.user && window.kvAuthUser) window.kvAuthUser(r.user);
                     const baseRev = Number(lsGet(LS_REV) || 0);
                     const dirty = lsGet(LS_DIRTY) === '1';
                     if (!r || !r.data) {                       // máy chủ chưa có dữ liệu
@@ -2317,13 +2054,197 @@
 
         render();
         if (code) sync();
-        else if (!lsGet(LS_ASKED)) { lsSet(LS_ASKED, '1'); setTimeout(askCode, 1200); }
+        
     })();
 
     // ===== Chạy ngầm / cài như ứng dụng (PWA) =====
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
     }
+    </script>
+    <script>
+    // ===== Tài khoản & ảnh đại diện =====
+    (function () {
+        const g = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+        const st = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+        const rm = k => { try { localStorage.removeItem(k); } catch (e) {} };
+        const API = '/api/progress';
+        let user = null; try { user = JSON.parse(g('auth_user')); } catch (e) {}
+        let mode = 'login';
+        const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+        const box = document.createElement('div');
+        box.className = 'bg-emerald-50 dark:bg-slate-950';
+        box.style.cssText = 'position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:16px;overflow:auto';
+        document.body.appendChild(box);
+        const inp = 'width:100%;padding:12px;border-radius:12px;border:1px solid #cbd5e1;font-size:16px;margin-top:8px;box-sizing:border-box';
+
+        function showAuth() {
+            box.style.display = 'flex';
+            const login = mode === 'login';
+            box.innerHTML = `<div class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white" style="width:100%;max-width:360px;padding:24px;border-radius:24px;box-shadow:0 8px 30px rgba(0,0,0,.12)">
+                <div style="text-align:center;font-size:40px">🌱</div>
+                <h2 style="text-align:center;font-weight:700;font-size:20px;margin:4px 0 12px">Khu Vườn Học Tập</h2>
+                <form id="kvForm">
+                    <input id="kvU" style="${inp}" placeholder="Tên đăng nhập" autocapitalize="none" autocorrect="off" autocomplete="username" required>
+                    <input id="kvP" type="password" style="${inp}" placeholder="Mật khẩu (từ 6 ký tự)" autocomplete="${login ? 'current-password' : 'new-password'}" required>
+                    <div id="kvE" style="color:#dc2626;font-size:13px;min-height:18px;margin-top:8px"></div>
+                    <button id="kvB" type="submit" style="width:100%;padding:12px;border-radius:12px;background:#059669;color:#fff;font-weight:700;font-size:16px;border:0;margin-top:4px">${login ? 'Đăng nhập' : 'Tạo tài khoản'}</button>
+                </form>
+                <button id="kvT" type="button" style="width:100%;margin-top:12px;background:none;border:0;color:#059669;font-size:14px">${login ? 'Chưa có tài khoản? Tạo mới' : 'Đã có tài khoản? Đăng nhập'}</button>
+            </div>`;
+            document.getElementById('kvT').onclick = () => { mode = login ? 'register' : 'login'; showAuth(); };
+            document.getElementById('kvForm').onsubmit = async e => {
+                e.preventDefault();
+                const b = document.getElementById('kvB'), er = document.getElementById('kvE');
+                b.disabled = true; er.textContent = '';
+                try {
+                    const res = await fetch(API + '?a=' + mode, { method: 'POST', headers: { 'content-type': 'application/json' },
+                        body: JSON.stringify({ username: document.getElementById('kvU').value, password: document.getElementById('kvP').value }) });
+                    const j = await res.json();
+                    if (!res.ok) { er.textContent = j.error || 'Có lỗi, thử lại nhé'; b.disabled = false; return; }
+                    const last = g('auth_last_user');
+                    if (last !== j.user.name) ['study_gardens_141_v5', 'sync_rev', 'sync_base', 'sync_dirty'].forEach(rm);   // tài khoản khác: bỏ dữ liệu cục bộ của người trước
+                    if (mode === 'register') st('kv_welcome', '1');
+                    st('auth_token', j.token); st('auth_user', JSON.stringify(j.user)); st('auth_last_user', j.user.name);
+                    location.reload();
+                } catch (x) { er.textContent = 'Không kết nối được máy chủ'; b.disabled = false; }
+            };
+        }
+
+        const av = document.createElement('button');
+        av.type = 'button';
+        av.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:40;width:44px;height:44px;border-radius:9999px;overflow:hidden;border:2px solid #10b981;background:#d1fae5;color:#047857;font-weight:700;font-size:18px;cursor:pointer;padding:0;display:none;align-items:center;justify-content:center';
+        document.body.appendChild(av);
+        const face = (px) => user && user.avatar ? `<img src="${user.avatar}" style="width:100%;height:100%;object-fit:cover">` : esc((user ? user.name : '?')[0].toUpperCase());
+        function renderAv() { if (!user) { av.style.display = 'none'; return; } av.style.display = 'flex'; av.innerHTML = face(); }
+        window.kvAuthUser = u => { user = u; st('auth_user', JSON.stringify(u)); renderAv(); };
+        window.kvAuthLogout = () => { rm('auth_token'); rm('auth_user'); location.reload(); };
+
+        function resize(file) {
+            return new Promise((ok, no) => {
+                const img = new Image();
+                img.onload = () => {
+                    const c = document.createElement('canvas'); c.width = c.height = 128;
+                    const m = Math.min(img.width, img.height);
+                    c.getContext('2d').drawImage(img, (img.width - m) / 2, (img.height - m) / 2, m, m, 0, 0, 128, 128);
+                    ok(c.toDataURL('image/jpeg', 0.82));
+                };
+                img.onerror = no; img.src = URL.createObjectURL(file);
+            });
+        }
+        const parseCSV = text => {
+            text = text.replace(/^\ufeff/, '');
+            const first = text.split(/\r?\n/)[0] || '';
+            const del = (first.match(/;/g) || []).length > (first.match(/,/g) || []).length ? ';' : ',';
+            const rows = []; let row = [], cell = '', q = false;
+            for (let i = 0; i < text.length; i++) {
+                const c = text[i];
+                if (q) { if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
+                else if (c === '"') q = true;
+                else if (c === del) { row.push(cell); cell = ''; }
+                else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+                else cell += c;
+            }
+            row.push(cell); rows.push(row);
+            return rows.map(r => r.map(x => x.trim())).filter(r => r.some(x => x));
+        };
+        const DEF = 'Khu vườn của tôi';
+        function importRows(rows) {
+            if (rows.length && /khu|chương|chuong|garden|chapter/i.test(rows[0][0] || '')) rows = rows.slice(1);
+            let gname = '', ng = 0, np = 0, firstIdx = -1;
+            rows.forEach(r => {
+                if (r[0]) gname = r[0];
+                if (!gname) return;
+                let gi = gardensData.findIndex(g => g.title.toLowerCase() === gname.toLowerCase());
+                if (gi < 0) { gardensData.push({ title: gname, plots: [] }); gi = gardensData.length - 1; ng++; }
+                if (firstIdx < 0) firstIdx = gi;
+                const subj = r[1];
+                if (subj && !gardensData[gi].plots.some(p => p.subject.toLowerCase() === subj.toLowerCase())) { gardensData[gi].plots.push({ subject: subj, sessions: [] }); np++; }
+            });
+            if (!ng && !np) return null;
+            const di = gardensData.findIndex(g => g.title === DEF && !g.plots.length);
+            if (di >= 0 && gardensData.length > 1) { gardensData.splice(di, 1); if (firstIdx > di) firstIdx--; }
+            currentGardenIndex = Math.max(0, firstIdx);
+            saveData(); renderGardenCarousel(); updateGlobalStats();
+            return { ng, np };
+        }
+        window.openImportModal = function () {
+            const p = document.createElement('div');
+            p.style.cssText = 'position:fixed;inset:0;z-index:90;background:rgba(15,23,42,.6);display:flex;align-items:center;justify-content:center;padding:16px';
+            const btn = 'width:100%;padding:11px;border-radius:12px;font-weight:600;border:0;margin-top:8px;';
+            p.innerHTML = `<div class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white" style="width:100%;max-width:380px;padding:24px;border-radius:24px">
+                <div style="font-weight:700;font-size:18px">Nhập nội dung học từ CSV</div>
+                <p style="font-size:13px;color:#64748b;margin:8px 0">Mỗi dòng là một chậu hoa. <b>Cột 1</b>: tên khu vườn (chương), <b>cột 2</b>: tên bài học. Có thể làm file bằng Excel, Numbers hoặc Google Sheets rồi xuất ra CSV. Bạn cũng có thể thêm khu vườn và chậu thủ công bất cứ lúc nào.</p>
+                <div id="kvImE" style="font-size:13px;min-height:16px"></div>
+                <input id="kvCsv" type="file" accept=".csv,text/csv,text/plain" style="display:none">
+                <button id="kvTpl" style="${btn}background:#e0f2fe;color:#0369a1">Tải file mẫu</button>
+                <button id="kvPickCsv" style="${btn}background:#059669;color:#fff">Chọn file CSV để nhập</button>
+                <button id="kvManual" style="${btn}background:#f1f5f9;color:#334155">Tự thêm thủ công</button>
+                <button id="kvImX" style="width:100%;padding:8px;background:none;border:0;color:#64748b;margin-top:4px">Đóng</button></div>`;
+            document.body.appendChild(p);
+            const msg = (t, ok) => { const e = p.querySelector('#kvImE'); e.textContent = t; e.style.color = ok ? '#059669' : '#dc2626'; };
+            p.onclick = e => { if (e.target === p) p.remove(); };
+            p.querySelector('#kvImX').onclick = () => p.remove();
+            p.querySelector('#kvManual').onclick = () => { p.remove(); openCreateGardenModal(); };
+            p.querySelector('#kvTpl').onclick = () => {
+                const csv = '\ufeffkhu_vuon,bai_hoc\nChương 1 - Làm quen,Bài 1 - Giới thiệu\nChương 1 - Làm quen,Bài 2 - Khái niệm cơ bản\nChương 2 - Thực hành,Bài 3 - Bài tập đầu tiên\nChương 2 - Thực hành,Bài 4 - Ôn tập\n';
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+                a.download = 'mau-nhap-khu-vuon.csv'; document.body.appendChild(a); a.click(); a.remove();
+                msg('Đã tải file mẫu. Sửa nội dung rồi chọn lại để nhập.', true);
+            };
+            const f = p.querySelector('#kvCsv');
+            p.querySelector('#kvPickCsv').onclick = () => f.click();
+            f.onchange = async () => {
+                if (!f.files[0]) return;
+                try {
+                    const r = importRows(parseCSV(await f.files[0].text()));
+                    if (!r) { msg('Không tìm thấy dòng hợp lệ trong file.', false); return; }
+                    showToast('Đã nhập CSV', `${r.ng} khu vườn mới, ${r.np} chậu mới`);
+                    p.remove();
+                } catch (e) { msg('Không đọc được file, hãy kiểm tra lại.', false); }
+            };
+        };
+        av.onclick = () => {
+            const p = document.createElement('div');
+            p.style.cssText = 'position:fixed;inset:0;z-index:90;background:rgba(15,23,42,.6);display:flex;align-items:center;justify-content:center;padding:16px';
+            p.innerHTML = `<div class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white" style="width:100%;max-width:320px;padding:24px;border-radius:24px;text-align:center">
+                <div style="width:96px;height:96px;border-radius:9999px;overflow:hidden;margin:0 auto 8px;border:3px solid #10b981;background:#d1fae5;color:#047857;font-size:40px;font-weight:700;display:flex;align-items:center;justify-content:center">${face()}</div>
+                <div style="font-weight:700;font-size:18px">${esc(user.name)}</div>
+                <div id="kvAvE" style="color:#dc2626;font-size:13px;min-height:16px"></div>
+                <input id="kvFile" type="file" accept="image/*" style="display:none">
+                <button id="kvPick" style="width:100%;padding:11px;border-radius:12px;background:#059669;color:#fff;font-weight:600;border:0;margin-top:8px">Đổi ảnh đại diện</button>
+                <button id="kvImp" style="width:100%;padding:11px;border-radius:12px;background:#e0f2fe;color:#0369a1;font-weight:600;border:0;margin-top:8px">Nhập nội dung từ CSV</button>
+                <button id="kvOut" style="width:100%;padding:11px;border-radius:12px;background:#f1f5f9;color:#334155;font-weight:600;border:0;margin-top:8px">Đăng xuất</button>
+                <button id="kvX" style="width:100%;padding:8px;background:none;border:0;color:#64748b;margin-top:4px">Đóng</button></div>`;
+            document.body.appendChild(p);
+            p.onclick = e => { if (e.target === p) p.remove(); };
+            p.querySelector('#kvX').onclick = () => p.remove();
+            p.querySelector('#kvImp').onclick = () => { p.remove(); openImportModal(); };
+            p.querySelector('#kvOut').onclick = () => { if (confirm('Đăng xuất khỏi tài khoản này?')) window.kvAuthLogout(); };
+            const f = p.querySelector('#kvFile');
+            p.querySelector('#kvPick').onclick = () => f.click();
+            f.onchange = async () => {
+                if (!f.files[0]) return;
+                try {
+                    const data = await resize(f.files[0]);
+                    const res = await fetch(API + '?a=avatar', { method: 'PUT', headers: { 'content-type': 'application/json', authorization: 'Bearer ' + g('auth_token') }, body: JSON.stringify({ avatar: data }) });
+                    if (!res.ok) throw 0;
+                    window.kvAuthUser((await res.json()).user);
+                    p.remove();
+                } catch (e) { p.querySelector('#kvAvE').textContent = 'Không đổi được ảnh, thử lại nhé'; }
+            };
+        };
+
+        if (!g('auth_token')) showAuth();
+        else {
+            renderAv();
+            const toc = 'openTocModal';
+            if (toc && user && user.name !== 'anduy13') document.querySelectorAll('[onclick^="' + toc + '("]').forEach(b => { b.style.display = 'none'; });
+            if (g('kv_welcome')) { rm('kv_welcome'); setTimeout(() => window.openImportModal(), 1500); }
+        }
+    })();
     </script>
 </body>
 </html>
