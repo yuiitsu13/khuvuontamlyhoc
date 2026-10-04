@@ -1,4 +1,4 @@
-const VERSION = 'kvht-v1';
+const VERSION = 'kvht-v2';
 const SHELL = ['/', '/index.html', '/manifest.webmanifest', '/icon.svg', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', e => {
