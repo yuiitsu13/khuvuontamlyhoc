@@ -1918,6 +1918,8 @@
         const lsDel = k => { try { localStorage.removeItem(k); } catch (e) {} };
 
         let code = lsGet('auth_token') || '';
+        let changeSeq = 0, pushSeq = 0;
+        const clearDirty = () => { if (pushSeq === changeSeq) lsDel('sync_dirty'); };
         let syncing = false, pushTimer = null, state = code ? 'idle' : 'off';
 
         // Không có nút đồng bộ: mọi thứ chạy tự động. Giữ hàm render rỗng để mã bên dưới không phải sửa.
@@ -1936,15 +1938,17 @@
 
         // --- gọi API ---
         async function api(method, body) {
+            if (method === 'PUT') pushSeq = changeSeq;
             const res = await fetch(API, {
                 method,
                 headers: { 'authorization': 'Bearer ' + code, 'content-type': 'application/json' },
                 body: body ? JSON.stringify(body) : undefined,
                 cache: 'no-store'
             });
-            if (res.status === 401) { if (window.kvAuthLogout) window.kvAuthLogout(); throw new Error('401'); }
+            if (res.status === 401) { if (window.__r401) { if (window.kvAuthLogout) window.kvAuthLogout(); } else window.__r401 = 1; throw new Error('401'); }
             if (res.status === 409) return { conflict: true, remote: await res.json() };
             if (!res.ok) throw new Error('HTTP ' + res.status);
+            window.__r401 = 0;
             return res.json();
         }
 
@@ -2009,17 +2013,18 @@
                     if (r && r.user && window.kvAuthUser) window.kvAuthUser(r.user);
                     const baseRev = Number(lsGet(LS_REV) || 0);
                     const dirty = lsGet(LS_DIRTY) === '1';
+                    if (r && r.rev && r.rev < baseRev) break;   // máy chủ trả dữ liệu cũ: bỏ qua, lần sau thử lại
                     if (!r || !r.data) {                       // máy chủ chưa có dữ liệu
                         const p = await api('PUT', { data: gardensData, baseRev: 0 });
                         if (p.conflict) continue;
-                        lsSet(LS_REV, String(p.rev)); lsDel(LS_DIRTY); writeBase(gardensData); break;
+                        lsSet(LS_REV, String(p.rev)); clearDirty(); writeBase(gardensData); break;
                     }
                     if (baseRev === 0 || (dirty && r.rev !== baseRev)) {   // máy mới hoặc hai bên cùng đổi → gộp
                         const merged = merge(readBase(), gardensData, r.data);
                         applyData(merged);
                         const p = await api('PUT', { data: merged, baseRev: r.rev });
                         if (p.conflict) continue;
-                        lsSet(LS_REV, String(p.rev)); lsDel(LS_DIRTY); writeBase(merged); break;
+                        lsSet(LS_REV, String(p.rev)); clearDirty(); writeBase(merged); break;
                     }
                     if (r.rev !== baseRev) {                   // chỉ máy chủ có dữ liệu mới → tải về
                         applyData(r.data); lsSet(LS_REV, String(r.rev)); writeBase(r.data); break;
@@ -2027,7 +2032,7 @@
                     if (dirty) {                               // chỉ máy này thay đổi → đẩy lên
                         const p = await api('PUT', { data: gardensData, baseRev });
                         if (p.conflict) continue;
-                        lsSet(LS_REV, String(p.rev)); lsDel(LS_DIRTY); writeBase(gardensData);
+                        lsSet(LS_REV, String(p.rev)); clearDirty(); writeBase(gardensData);
                     }
                     break;
                 }
@@ -2043,6 +2048,7 @@
         const originalSave = window.saveData;
         window.saveData = function () {
             originalSave.apply(this, arguments);
+            changeSeq++;
             if (code) { lsSet(LS_DIRTY, '1'); schedule(800); }
         };
 
