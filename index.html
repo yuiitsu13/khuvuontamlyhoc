@@ -155,9 +155,9 @@
                 
 
                 <!-- Table of Contents Button -->
-                <button onclick="openTocModal()" class="w-full h-12 sm:w-12 flex-col gap-0.5 rounded-xl bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 hover:bg-teal-100 dark:hover:bg-teal-900/60 transition-colors flex items-center justify-center shadow-sm border border-teal-200 dark:border-teal-900/50" title="Mục lục & số lần ôn lại">
-                    <i class="fa-solid fa-list-ol"></i>
-                    <span class="text-[9px] font-semibold leading-none">Mục lục</span>
+                <button onclick="openTocModal()" class="w-full h-12 sm:w-12 flex-col gap-0.5 rounded-xl bg-teal-50 dark:bg-teal-950/40 text-teal-600 dark:text-teal-400 hover:bg-teal-100 dark:hover:bg-teal-900/60 transition-colors flex items-center justify-center shadow-sm border border-teal-200 dark:border-teal-900/50" title="Tổng quan: số bài đã học và số lần ôn theo từng chương">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span class="text-[9px] font-semibold leading-none">Tổng quan</span>
                 </button>
 
                 <!-- Calendar Button -->
@@ -231,6 +231,9 @@
                             <i class="fa-solid fa-folder-plus"></i> Vườn Mới
                         </button>
                         <button onclick="openImportModal()" class="flex-1 sm:flex-none px-3 py-2 rounded-xl bg-sky-100 dark:bg-sky-900/40 hover:bg-sky-200 text-sky-700 dark:text-sky-300 font-semibold text-xs transition-all"><i class="fa-solid fa-list-check mr-1"></i>Nhập nhiều bài</button>
+                        <button id="btnUndo" type="button" onclick="undoLast()" class="flex-1 sm:flex-none px-3 py-2 rounded-xl bg-amber-100 dark:bg-amber-900/40 hover:bg-amber-200 dark:hover:bg-amber-800/60 text-amber-800 dark:text-amber-300 font-semibold text-xs transition-colors hidden">
+                            <i class="fa-solid fa-rotate-left"></i> <span id="btnUndoText">Hoàn tác</span>
+                        </button>
                         <button id="btnDeleteGarden" onclick="deleteCurrentGarden()" class="flex-1 sm:flex-none px-3 py-2 rounded-xl bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 font-semibold text-xs transition-colors hidden">
                             <i class="fa-solid fa-trash-can"></i> Xóa Vườn
                         </button>
@@ -484,12 +487,32 @@
         </div>
     </div>
 
+    <!-- Edit Plot Modal -->
+    <div id="plotManageModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl w-full max-w-sm shadow-2xl border border-slate-200 dark:border-slate-700">
+            <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-white flex items-center gap-2">
+                <i class="fa-solid fa-pen text-emerald-500"></i> Sửa Chậu
+            </h3>
+            <p id="plotManageInfo" class="text-xs text-slate-500 mb-4"></p>
+            <label for="plotManageInput" class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Tên chậu</label>
+            <input id="plotManageInput" maxlength="200" onkeydown="if(event.key==='Enter'){event.preventDefault();savePlotRename();}" class="w-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-white p-3 rounded-xl mb-4 outline-none focus:ring-2 focus:ring-emerald-500 text-sm" placeholder="Tên chủ đề bài học...">
+            <div class="flex gap-3 mb-3">
+                <button type="button" onclick="closePlotManage()" class="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 p-3 rounded-xl font-semibold text-sm transition-colors">Hủy</button>
+                <button type="button" onclick="savePlotRename()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white p-3 rounded-xl font-bold text-sm shadow-md transition-colors">Lưu tên</button>
+            </div>
+            <button type="button" onclick="deletePlotFromManage()" class="w-full bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-600 dark:text-red-400 p-3 rounded-xl font-semibold text-sm transition-colors">
+                <i class="fa-solid fa-trash-can mr-1"></i> Xóa chậu này
+            </button>
+            <p class="text-[11px] text-slate-400 mt-2 text-center">Xóa nhầm? Bấm <b>Hoàn tác</b> ngay sau đó để lấy lại cả lịch sử học.</p>
+        </div>
+    </div>
+
     <!-- Table of Contents Modal -->
     <div id="tocModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-3xl w-full p-5 sm:p-6 shadow-2xl border border-teal-200 dark:border-teal-900/50 flex flex-col max-h-[90vh]">
             <div class="flex justify-between items-center mb-3 border-b dark:border-slate-800 pb-3 flex-shrink-0">
                 <h3 class="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
-                    <i class="fa-solid fa-list-ol text-teal-500"></i> Mục Lục Tâm Lý Học
+                    <i class="fa-solid fa-chart-pie text-teal-500"></i> Tổng Quan Học Tập
                 </h3>
                 <button onclick="closeTocModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 bg-slate-100 dark:bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
             </div>
@@ -545,7 +568,16 @@
             return fresh;
         }
 
+        // Mỗi chậu có một mã riêng để đồng bộ nhận ra chậu dù đã đổi tên
+        const newPlotId = () => 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+        function ensureIds(arr) {
+            let added = false;
+            (arr || []).forEach(g => (g.plots || []).forEach(p => { if (!p.id) { p.id = newPlotId(); added = true; } }));
+            return added;
+        }
+
         let gardensData = loadGardensData();
+        if (ensureIds(gardensData)) { try { localStorage.setItem('study_gardens_141_v5', JSON.stringify(gardensData)); } catch (e) {} }
         let currentGardenIndex = 0;
         let currentFocusContext = null; 
         
@@ -562,6 +594,7 @@
         };
 
         function saveData() { 
+            ensureIds(gardensData);
             localStorage.setItem('study_gardens_141_v5', JSON.stringify(gardensData)); 
         }
 
@@ -719,15 +752,19 @@
                     if(count>=5){ bg="bg-gradient-to-b from-amber-50 to-white dark:from-emerald-900/25 dark:to-slate-800"; border="border-emerald-400 dark:border-emerald-500 shadow-md shadow-emerald-200 dark:shadow-emerald-900/50"; }
 
                     container.innerHTML += `
-                        <button type="button" onclick="handlePlotClick(${i}, ${count})" aria-label="${escapeHtml(p.subject)} — ${count === 0 ? 'chưa học' : count + ' lượt'}" title="${escapeHtml(p.subject)}" class="relative group rounded-2xl p-3 shadow-sm border-2 ${bg} ${border} flex flex-col items-center justify-between gap-1 cursor-pointer hover:-translate-y-1 transition-transform min-h-[135px] text-center w-full">
+                        <div class="relative h-full">
+                        <button type="button" onclick="handlePlotClick(${i}, ${count})" aria-label="${escapeHtml(p.subject)} — ${count === 0 ? 'chưa học' : count + ' lượt'}" title="${escapeHtml(p.subject)}" class="relative group rounded-2xl p-3 shadow-sm border-2 ${bg} ${border} flex flex-col items-center justify-between gap-1 cursor-pointer hover:-translate-y-1 transition-transform min-h-[135px] text-center w-full h-full">
                             <div class="my-1 h-16 flex items-center justify-center text-3xl flex-shrink-0">${icon}</div>
                             <div class="text-xs font-bold text-slate-800 dark:text-slate-200 line-clamp-4 mt-1 w-full break-words">${escapeHtml(p.subject)}</div>
                             <div class="text-[10px] font-bold text-slate-500 mt-2 bg-slate-100 dark:bg-slate-900 px-2 py-0.5 rounded-full flex-shrink-0">${count === 0 ? "Bấm học ngay" : count + " lượt"}</div>
                         </button>
+                        <button type="button" onclick="openPlotManage(${i})" aria-label="Sửa hoặc xóa chậu ${escapeHtml(p.subject)}" title="Đổi tên / xóa chậu" class="absolute top-1.5 right-1.5 w-7 h-7 rounded-full bg-white/85 dark:bg-slate-900/80 text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 shadow-sm border border-slate-200 dark:border-slate-700 flex items-center justify-center text-[11px] transition-colors"><i class="fa-solid fa-pen"></i></button>
+                        </div>
                     `;
                 });
             }
 
+            updateUndoButton();
             const dots = document.getElementById('gardenPaginationDots');
             dots.innerHTML = '';
             gardensData.forEach((g, i) => {
@@ -1050,7 +1087,7 @@
         function handleAddPlot() {
             const v = document.getElementById('newPlotInput').value.trim();
             if(v) { 
-                gardensData[currentGardenIndex].plots.push({subject: v, sessions:[]}); 
+                gardensData[currentGardenIndex].plots.push({id: newPlotId(), subject: v, sessions:[]}); 
                 saveData(); renderGardenCarousel(); 
                 document.getElementById('addPlotModal').classList.add('hidden'); 
                 showToast('Đã thêm chậu mới', v);
@@ -1069,16 +1106,175 @@
             }
         }
 
+        // ===== Hoàn tác: xóa nhầm chậu hoặc vườn đều lấy lại được (kể cả lịch sử học) =====
+        const DEFAULT_GARDEN = 'Khu vườn của tôi';
+        const undoStack = [];   // mới nhất ở cuối, giữ tối đa 20 thao tác (mất khi tải lại trang)
+        const cloneJson = o => JSON.parse(JSON.stringify(o));
+
+        function pushUndo(entry) {
+            undoStack.push(entry);
+            if (undoStack.length > 20) undoStack.shift();
+            updateUndoButton();
+        }
+        function updateUndoButton() {
+            const b = document.getElementById('btnUndo');
+            if (!b) return;
+            const last = undoStack[undoStack.length - 1];
+            b.classList.toggle('hidden', !last);
+            if (!last) return;
+            document.getElementById('btnUndoText').textContent = 'Hoàn tác' + (undoStack.length > 1 ? ' (' + undoStack.length + ')' : '');
+            b.title = 'Khôi phục: ' + last.label;
+        }
+        function showUndoToast(msg, sub) {
+            document.querySelectorAll('.undo-toast').forEach(x => x.remove());   // nút cũ không được hoàn tác nhầm thao tác mới
+            let box = document.getElementById('toastBox');
+            if (!box) {
+                box = document.createElement('div');
+                box.id = 'toastBox';
+                box.setAttribute('aria-live', 'polite');
+                box.className = 'fixed bottom-4 left-1/2 -translate-x-1/2 z-[100] flex flex-col gap-2 items-center pointer-events-none px-4 w-full max-w-sm';
+                document.body.appendChild(box);
+            }
+            const t = document.createElement('div');
+            t.className = 'undo-toast pointer-events-auto bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-semibold pl-4 pr-2 py-2 rounded-xl shadow-lg flex items-center gap-3 max-w-full transition-all duration-300 opacity-0 translate-y-2';
+            t.innerHTML = `<i class="fa-solid fa-trash-can text-red-400 dark:text-red-500 flex-shrink-0"></i><span class="min-w-0 flex-1"><span>${escapeHtml(msg)}</span>${sub ? `<span class="block text-[11px] font-normal opacity-70 truncate">${escapeHtml(sub)}</span>` : ''}</span><button type="button" class="flex-shrink-0 px-3 py-1.5 rounded-lg bg-amber-400 text-slate-900 font-bold text-xs">Hoàn tác</button>`;
+            t.querySelector('button').onclick = () => undoLast();
+            box.appendChild(t);
+            requestAnimationFrame(() => t.classList.remove('opacity-0', 'translate-y-2'));
+            setTimeout(() => { t.classList.add('opacity-0'); setTimeout(() => t.remove(), 300); }, 8000);
+        }
+
+        // Giữ cho đồng hồ đang chạy trỏ đúng chậu khi vị trí chậu/vườn thay đổi
+        function ctxPlotRemoved(gi, pi) {
+            const c = currentFocusContext; if (!c || c.gardenIdx !== gi) return;
+            if (c.plotIdx === pi) { currentFocusContext = null; document.getElementById('activeStudyTarget').classList.add('hidden'); }
+            else if (c.plotIdx > pi) c.plotIdx--;
+        }
+        function ctxPlotInserted(gi, pi) { const c = currentFocusContext; if (c && c.gardenIdx === gi && c.plotIdx >= pi) c.plotIdx++; }
+        function ctxGardenRemoved(gi) {
+            const c = currentFocusContext; if (!c) return;
+            if (c.gardenIdx === gi) { currentFocusContext = null; document.getElementById('activeStudyTarget').classList.add('hidden'); }
+            else if (c.gardenIdx > gi) c.gardenIdx--;
+        }
+        function ctxGardenInserted(gi) { const c = currentFocusContext; if (c && c.gardenIdx >= gi) c.gardenIdx++; }
+        // Chậu đang được học (đồng hồ chạy hoặc đang ghi kết quả) thì chưa cho xóa
+        function plotInUse(gi, pi) {
+            const c = currentFocusContext;
+            if (!c || c.gardenIdx !== gi || (pi != null && c.plotIdx !== pi)) return false;
+            const logOpen = !document.getElementById('logResultModal').classList.contains('hidden');
+            return (isRunning && currentMode === 'focus') || logOpen;
+        }
+
+        function undoLast() {
+            const e = undoStack.pop();
+            if (!e) return;
+            document.querySelectorAll('.undo-toast').forEach(x => x.remove());
+            if (e.type === 'plot') {
+                let gi = gardensData.findIndex(g => g.title === e.gTitle);
+                if (gi < 0) { gardensData.push({ title: e.gTitle, plots: [] }); gi = gardensData.length - 1; }
+                const g = gardensData[gi];
+                const at = Math.min(e.index, g.plots.length);
+                g.plots.splice(at, 0, e.plot);
+                ctxPlotInserted(gi, at);
+                currentGardenIndex = gi;
+            } else if (e.type === 'garden') {
+                if (e.autoDefault && gardensData.length === 1 && gardensData[0].title === DEFAULT_GARDEN && !gardensData[0].plots.length) {
+                    gardensData.splice(0, 1);   // bỏ vườn trống tự sinh khi lỡ xóa vườn cuối cùng
+                    ctxGardenRemoved(0);
+                }
+                const at = Math.min(e.index, gardensData.length);
+                gardensData.splice(at, 0, e.garden);
+                ctxGardenInserted(at);
+                currentGardenIndex = at;
+            }
+            saveData();
+            renderGardenCarousel();
+            updateGlobalStats();
+            showToast('Đã hoàn tác', e.label);
+        }
+
+        // ===== Sửa / xóa chậu =====
+        let manageCtx = null;
+        function openPlotManage(pi) {
+            const p = gardensData[currentGardenIndex] && gardensData[currentGardenIndex].plots[pi];
+            if (!p) return;
+            manageCtx = { gardenIdx: currentGardenIndex, plotIdx: pi };
+            const n = (p.sessions || []).length;
+            document.getElementById('plotManageInfo').textContent = n ? `${n} lượt học (${Math.max(0, n - 1)} lần ôn lại)` : 'Chưa học lần nào';
+            const inp = document.getElementById('plotManageInput');
+            inp.value = p.subject;
+            document.getElementById('plotManageModal').classList.remove('hidden');
+            setTimeout(() => { inp.focus(); inp.select(); }, 30);
+        }
+        function closePlotManage() { document.getElementById('plotManageModal').classList.add('hidden'); manageCtx = null; }
+
+        function savePlotRename() {
+            if (!manageCtx) return;
+            const g = gardensData[manageCtx.gardenIdx];
+            const p = g && g.plots[manageCtx.plotIdx];
+            if (!p) { closePlotManage(); return; }
+            const v = document.getElementById('plotManageInput').value.trim();
+            if (!v) { showToast('Tên chậu không được để trống'); return; }
+            if (v === p.subject) { closePlotManage(); return; }
+            if (g.plots.some((x, i) => i !== manageCtx.plotIdx && x.subject.toLowerCase() === v.toLowerCase())) {
+                showToast('Vườn này đã có chậu trùng tên', v); return;
+            }
+            p.subject = v;
+            const c = currentFocusContext;
+            if (c && c.gardenIdx === manageCtx.gardenIdx && c.plotIdx === manageCtx.plotIdx) {
+                c.subject = v;
+                document.getElementById('activeStudySubject').textContent = v;
+            }
+            saveData();
+            closePlotManage();
+            renderGardenCarousel();
+            showToast('Đã đổi tên chậu', v);
+        }
+
+        function deletePlotFromManage() {
+            if (!manageCtx) return;
+            const { gardenIdx: gi, plotIdx: pi } = manageCtx;
+            const g = gardensData[gi];
+            const p = g && g.plots[pi];
+            if (!p) { closePlotManage(); return; }
+            if (plotInUse(gi, pi)) { showToast('Chậu này đang được học', 'Hãy kết thúc phiên học trước khi xóa'); return; }
+            pushUndo({ type: 'plot', label: p.subject, gTitle: g.title, index: pi, plot: cloneJson(p) });
+            g.plots.splice(pi, 1);
+            ctxPlotRemoved(gi, pi);
+            saveData();
+            closePlotManage();
+            renderGardenCarousel();
+            updateGlobalStats();
+            showUndoToast('Đã xóa chậu', p.subject);
+        }
+
         function deleteCurrentGarden() {
             if(currentGardenIndex >= BOOK_GARDEN_COUNT && gardensData.length > BOOK_GARDEN_COUNT) {
-                gardensData.splice(currentGardenIndex, 1);
-                if (!gardensData.length) gardensData.push({ title: 'Khu vườn của tôi', plots: [] });
-                currentGardenIndex = 0;
+                const gi = currentGardenIndex;
+                if (plotInUse(gi, null)) { showToast('Đang học trong vườn này', 'Hãy kết thúc phiên học trước khi xóa vườn'); return; }
+                const garden = gardensData[gi];
+                const entry = { type: 'garden', label: gardenLabel(gi), index: gi, garden: cloneJson(garden), autoDefault: false };
+                gardensData.splice(gi, 1);
+                ctxGardenRemoved(gi);
+                if (!gardensData.length) { gardensData.push({ title: DEFAULT_GARDEN, plots: [] }); entry.autoDefault = true; }
+                pushUndo(entry);
+                currentGardenIndex = Math.min(gi, gardensData.length - 1);
                 saveData();
                 renderGardenCarousel();
-                showToast('Đã xóa vườn');
+                updateGlobalStats();
+                showUndoToast('Đã xóa vườn', entry.label);
             }
         }
+
+        // Ctrl/Cmd + Z để hoàn tác (khi không đang gõ chữ hay mở cửa sổ)
+        document.addEventListener('keydown', e => {
+            if (!((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && String(e.key).toLowerCase() === 'z')) return;
+            const tag = (e.target.tagName || '').toLowerCase();
+            if (['input', 'textarea', 'select'].includes(tag) || e.target.isContentEditable) return;
+            if (document.querySelector('[role="dialog"]:not(.hidden)') || !undoStack.length) return;
+            e.preventDefault();
+            undoLast();
+        });
 
         // ===== Nhật ký học tập theo ngày =====
         const VN_WEEKDAYS = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
@@ -1421,7 +1617,7 @@
 
         function initUx() {
             // Cửa sổ: role dialog; bấm nền để đóng (trừ cửa sổ ghi kết quả vì cần lưu phiên học)
-            const dismissible = ['soundModal', 'readyStudyModal', 'plotDetailModal', 'calendarModal', 'createGardenModal', 'addPlotModal', 'tocModal'];
+            const dismissible = ['soundModal', 'readyStudyModal', 'plotDetailModal', 'calendarModal', 'createGardenModal', 'addPlotModal', 'plotManageModal', 'tocModal'];
             dismissible.concat(['logResultModal']).forEach(id => {
                 const el = document.getElementById(id);
                 if (!el) return;
@@ -1963,20 +2159,26 @@
             (arr || []).forEach(g => (g.plots || []).forEach(p => (p.sessions || []).forEach(x => set.add(g.title + '\u0001' + p.subject + '\u0001' + sk(x)))));
             return set;
         }
+        // Tìm chậu tương ứng: ưu tiên theo mã riêng (chịu được đổi tên), không có thì theo tên
+        const findPlot = (list, p) => (p.id && list.find(x => x.id === p.id)) || list.find(x => x.subject === p.subject) || null;
         function merge(base, local, remote) {
+            ensureIds(local); ensureIds(remote);
             local = local.filter(g => !(g.title === 'Khu vườn của tôi' && !(g.plots || []).length && remote.length));
             const out = clone(remote);
             local.forEach(lg => {
                 const og = out.find(g => g.title === lg.title);
                 if (!og) { out.push(clone(lg)); return; }
+                const bg = Array.isArray(base) ? base.find(g => g.title === lg.title) : null;
                 (lg.plots || []).forEach(lp => {
-                    const op = og.plots.find(p => p.subject === lp.subject);
+                    const op = findPlot(og.plots, lp);
                     if (!op) { og.plots.push(clone(lp)); return; }
                     op.sessions = op.sessions || [];
                     const seen = new Set(op.sessions.map(sk));
                     (lp.sessions || []).forEach(x => { if (!seen.has(sk(x))) { op.sessions.push(x); seen.add(sk(x)); } });
                     op.sessions.sort((a, b) => (a.ts || 0) - (b.ts || 0));
                     if (!op.flower && lp.flower) op.flower = lp.flower;
+                    const bp = bg && findPlot(bg.plots || [], lp);   // đổi tên: bên nào đổi so với lần đồng bộ trước thì giữ tên đó
+                    if (bp && lp.subject !== bp.subject && op.subject === bp.subject) op.subject = lp.subject;
                 });
             });
             if (Array.isArray(base)) {
@@ -1986,15 +2188,26 @@
                 out.forEach(g => g.plots.forEach(p => {
                     p.sessions = (p.sessions || []).filter(x => !gone.has(g.title + '\u0001' + p.subject + '\u0001' + sk(x)));
                 }));
-                const localTitles = new Set(local.map(g => g.title));
+                base.forEach(bg => {   // chậu đã xóa ở một trong hai máy
+                    const og = out.find(g => g.title === bg.title); if (!og) return;
+                    const lg = local.find(g => g.title === bg.title), rg = remote.find(g => g.title === bg.title);
+                    og.plots = og.plots.filter(op => {
+                        if (!findPlot(bg.plots || [], op)) return true;            // chậu mới tạo sau lần đồng bộ trước
+                        if (lg && !findPlot(lg.plots || [], op)) return false;
+                        if (rg && !findPlot(rg.plots || [], op)) return false;
+                        return true;
+                    });
+                });
+                const localTitles = new Set(local.map(g => g.title)), remoteTitles = new Set(remote.map(g => g.title));
                 for (let i = out.length - 1; i >= 0; i--) {
-                    if (base.some(g => g.title === out[i].title) && !localTitles.has(out[i].title)) out.splice(i, 1);   // vườn tự tạo đã xóa
+                    if (base.some(g => g.title === out[i].title) && (!localTitles.has(out[i].title) || !remoteTitles.has(out[i].title))) out.splice(i, 1);   // vườn đã xóa ở một trong hai máy
                 }
             }
             return out;
         }
 
         function applyData(data) {
+            ensureIds(data);
             gardensData = data;
             lsSet(STORE_KEY, JSON.stringify(data));
             if (currentGardenIndex >= gardensData.length) currentGardenIndex = 0;
@@ -2298,8 +2511,6 @@
         if (!g('auth_token')) showAuth();
         else {
             renderAv();
-            const toc = 'openTocModal';
-            if (toc && user && user.name !== 'anduy13') document.querySelectorAll('[onclick^="' + toc + '("]').forEach(b => { b.style.display = 'none'; });
             if (g('kv_welcome')) { rm('kv_welcome'); setTimeout(() => window.openImportModal(), 1500); }
         }
     })();
